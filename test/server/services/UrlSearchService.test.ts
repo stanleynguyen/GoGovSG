@@ -1,9 +1,7 @@
 import { UrlSearchService } from '../../../src/server/services/UrlSearchService'
 import { UrlRepositoryMock } from '../mocks/repositories/UrlRepository'
-import {
-  SearchResultsSortOrder,
-  StorableUrlState,
-} from '../../../src/server/repositories/enums'
+import { StorableUrlState } from '../../../src/server/repositories/enums'
+import { SearchResultsSortOrder } from '../../../src/shared/search'
 
 /**
  * Unit tests for UrlSearchService.
