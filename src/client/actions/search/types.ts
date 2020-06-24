@@ -37,6 +37,7 @@ export type SetSearchResultsAction = {
   payload: {
     urls: Array<UrlTypePublic>
     count: number
+    query: string
   }
 }
 

@@ -1,5 +1,6 @@
 import { ThunkAction } from 'redux-thunk'
 import { Dispatch } from 'react'
+import querystring from 'querystring'
 import {
   CLEAR_SEARCH_QUERY,
   ClearSearchQueryAction,
@@ -21,6 +22,7 @@ import { GetReduxState } from '../types'
 import rootActions from '../root'
 import { SearchResultsSortOrder } from '../../../shared/search'
 import { UrlTypePublic } from '../../reducers/search/types'
+import { get } from '../../util/requests'
 
 function setSearchQuery(payload: string): SetSearchQueryAction {
   return {
@@ -61,6 +63,7 @@ function setSearchPageNumber(payload: number): SetSearchPageNumberAction {
 function setSearchResults(payload: {
   count: number
   urls: Array<UrlTypePublic>
+  query: string
 }): SetSearchResultsAction {
   return {
     type: SET_SEARCH_RESULTS,
@@ -74,11 +77,45 @@ const getSearchResults = (): ThunkAction<
   void,
   SearchActionType | RootActionType
 > => async (
-  dispatch: Dispatch<SetErrorMessageAction>,
+  dispatch: Dispatch<SetErrorMessageAction | SetSearchResultsAction>,
   getState: GetReduxState,
 ) => {
-  const state = getState()
-  dispatch(rootActions.setErrorMessage(`Not implemented yet. state: ${state}`))
+  const {
+    search: {
+      tableConfig: { currentPage, rowsPerPage, sortOrder },
+      query,
+    },
+  } = getState()
+  if (!query) {
+    return
+  }
+  const offset = currentPage * rowsPerPage
+  const limit = rowsPerPage
+  const paramsObj = {
+    query,
+    sortOrder,
+    limit,
+    offset,
+  }
+  const params = querystring.stringify(paramsObj)
+  const response = await get(`/api/search/urls?${params}`)
+  const json = await response.json()
+  if (!response.ok) {
+    dispatch(
+      rootActions.setErrorMessage(
+        json.message || 'Error fetching search results',
+      ),
+    )
+    return
+  }
+
+  dispatch(
+    setSearchResults({
+      count: json.count,
+      urls: json.urls as Array<UrlTypePublic>,
+      query,
+    }),
+  )
 }
 
 export default {

@@ -7,6 +7,7 @@ export type SearchState = {
   results: Array<UrlTypePublic>
   resultsCount: number
   query: string
+  queryForResult: string | null
   tableConfig: SearchResultsTableConfig
 }
 

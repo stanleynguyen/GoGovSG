@@ -14,6 +14,7 @@ const initialState: SearchState = {
   query: '',
   results: [],
   resultsCount: 0,
+  queryForResult: null,
   tableConfig: {
     rowsPerPage: 10,
     currentPage: 0,
@@ -62,9 +63,14 @@ const search: (state: SearchState, action: SearchActionType) => SearchState = (
       }
       break
     case SET_SEARCH_RESULTS:
+      // Check if the result is for an old query.
+      if (action.payload.query !== state.query) {
+        break
+      }
       nextState = {
         resultsCount: action.payload.count,
         results: action.payload.urls,
+        queryForResult: action.payload.query,
       }
       break
     default:
