@@ -128,7 +128,7 @@ const LandingGraphicSliver = () => {
     if (isMediumWidth) {
       return 50 / 64
     }
-    return 0
+    return 0.125
   }
 
   return (

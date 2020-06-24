@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) =>
     headerButton: {
       // this class is not mobile first by default as padding should not be set
       // when it is not mobile.
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('xs')]: {
         paddingLeft: 0,
         paddingRight: 0,
         minWidth: theme.spacing(6),

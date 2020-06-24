@@ -48,7 +48,7 @@ const HomePage = (props) => {
   }
 
   return (
-    <BaseLayout headerBackgroundType={isMobileView ? 'light' : 'white'}>
+    <BaseLayout headerBackgroundType={isMobileView ? '#f9f9f9' : 'light'}>
       <LandingGraphicSliver />
       <div id="landing-bottom">
         <Section backgroundType="light">
