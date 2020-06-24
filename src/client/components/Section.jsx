@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme) =>
         props.backgroundType === 'light'
           ? theme.palette.secondary.light
           : theme.palette.secondary.dark,
+      boxShadow: (props) =>
+        props.shadow ? '0px 1px 1px rgba(216, 216, 216, 0.5)' : 0,
       '@media screen\\0': {
         minHeight: '1px',
       },
@@ -30,15 +32,18 @@ const Section = ({
   verticalMultiplier = 1,
   topMultiplier = 1,
   bottomMultiplier = 1,
+  className = '',
+  shadow = false,
 }) => {
   const classes = useStyles({
     backgroundType,
     verticalMultiplier,
     topMultiplier,
     bottomMultiplier,
+    shadow,
   })
   return (
-    <div className={classes.backgroundType}>
+    <div className={`${className} ${classes.backgroundType}`}>
       <ApplyAppMargins>
         <div className={classes.childrenPadding}>{children}</div>
       </ApplyAppMargins>

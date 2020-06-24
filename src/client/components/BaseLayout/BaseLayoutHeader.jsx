@@ -18,6 +18,9 @@ import Section from '../Section'
 import logoutIcon from './assets/logout-icon.svg'
 import helpIcon from '../../assets/help-icon.svg'
 import feedbackIcon from './assets/feedback-icon.svg'
+import githubIcon from './assets/github-icon.svg'
+import signinIcon from './assets/signin-icon.svg'
+import searchIcon from '../../assets/icons/go-search-icon.svg'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -55,6 +58,9 @@ const useStyles = makeStyles((theme) =>
       minWidth: '90px',
       order: 10,
     },
+    signInIcon: {
+      paddingLeft: theme.spacing(0.5),
+    },
     toolbarLogo: {
       maxWidth: '130px',
       width: '40%',
@@ -77,14 +83,22 @@ const mapDispatchToProps = (dispatch) => ({
 
 const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
   const theme = useTheme()
-  const isMobileVariant = useMediaQuery(theme.breakpoints.down('xs'))
+  const isMobileVariant = useMediaQuery(theme.breakpoints.down('sm'))
   const classes = useStyles({ isLoggedIn })
 
   const headers = [
     {
+      text: 'GoSearch',
+      // TODO: Add search link
+      link: i18next.t('general.links.contribute'),
+      public: true,
+      icon: searchIcon,
+    },
+    {
       text: 'Contribute',
       link: i18next.t('general.links.contribute'),
       public: true,
+      icon: githubIcon,
     },
     {
       text: 'FAQ',
@@ -116,19 +130,38 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
       <img src={logoutIcon} alt="Sign out" />
     </Button>
   ) : (
-    <Button
-      href="/#/login"
-      size="large"
-      color="primary"
-      variant="contained"
-      className={classes.appBarSignInBtn}
-    >
-      Sign in
-    </Button>
+    <>
+      <Hidden xsDown>
+        <Button
+          href="/#/login"
+          size="large"
+          color="primary"
+          variant="contained"
+          className={classes.appBarSignInBtn}
+        >
+          Sign in
+        </Button>
+      </Hidden>
+      <Hidden smUp>
+        <Button href="/#/login" size="large">
+          Sign in
+          <img
+            src={signinIcon}
+            alt="Sign in icon"
+            className={classes.signInIcon}
+            aria-hidden
+          />
+        </Button>
+      </Hidden>
+    </>
   )
 
   return (
-    <Section backgroundType={backgroundType} verticalMultiplier={0}>
+    <Section
+      backgroundType={backgroundType}
+      verticalMultiplier={0}
+      shadow={!isLoggedIn && isMobileVariant}
+    >
       <AppBar position="static" color="transparent" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <a href="/#/" className={classes.toolbarLogo}>

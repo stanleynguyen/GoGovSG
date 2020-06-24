@@ -1,9 +1,8 @@
 import React from 'react'
 import { Trans } from 'react-i18next'
 import {
-  Button,
-  Hidden,
   Link,
+  TextField,
   Typography,
   createStyles,
   makeStyles,
@@ -11,8 +10,8 @@ import {
   useTheme,
 } from '@material-ui/core'
 import Section from '../Section'
-import { ApplyAppMargins, IgnoreAppRightMargins } from '../AppMargins'
-import RotatingLinksGraphic from './RotatingLinksGraphic'
+import landingGraphicMain from '../../assets/landing-page-graphics/landing-main.svg'
+import searchIcon from '../../assets/icons/go-search-icon.svg'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -29,17 +28,40 @@ const useStyles = makeStyles((theme) =>
     container: {
       display: 'flex',
       flexDirection: 'column',
-      [theme.breakpoints.up('lg')]: {
+      flexWrap: 'wrap',
+      position: 'relative',
+      top: '35px',
+      alignItems: 'center',
+      marginTop: '-35px',
+      [theme.breakpoints.up('md')]: {
+        alignItems: 'start',
+        justifyContent: 'space-around',
         flexDirection: 'row',
+      },
+      [theme.breakpoints.up('lg')]: {
+        marginLeft: theme.spacing(6),
+        marginRight: theme.spacing(6),
+      },
+      [theme.breakpoints.up('xl')]: {
+        marginLeft: theme.spacing(11),
+        marginRight: theme.spacing(11),
       },
     },
     titleTextContainer: {
       display: 'flex',
       flexDirection: 'column',
       maxWidth: '485px',
+      alignItems: 'center',
+      textAlign: 'center',
       marginBottom: theme.spacing(2),
       [theme.breakpoints.up('sm')]: {
         minWidth: '500px',
+      },
+      [theme.breakpoints.up('md')]: {
+        alignItems: 'start',
+        textAlign: 'start',
+        marginTop: theme.spacing(4),
+        marginBottom: 0,
       },
       '@media screen\\0': {
         display: 'inline',
@@ -47,16 +69,20 @@ const useStyles = makeStyles((theme) =>
     },
     titleText: {
       fontWeight: '500',
+      marginBottom: theme.spacing(1.5),
+      [theme.breakpoints.up('md')]: {
+        marginBottom: theme.spacing(3),
+      },
     },
     subtitleText: {
-      marginTop: theme.spacing(2),
       maxWidth: '404px',
     },
-    rotatingLinksGraphic: {
-      marginTop: theme.spacing(4),
-      marginLeft: 'auto',
+    headerGraphic: {
+      position: 'relative',
+      top: '8px',
+      zIndex: 1,
       [theme.breakpoints.up('lg')]: {
-        marginTop: theme.spacing(0),
+        marginRight: '96px',
       },
     },
     fillColor: {
@@ -70,32 +96,48 @@ const useStyles = makeStyles((theme) =>
         minHeight: '200px',
       },
     },
-    learnMoreButton: {
-      height: '44px',
-      width: '150px',
-      // Creates the half in colour-fill, half outside it effect.
-      marginTop: 'calc(-44px / 2)',
-      backgroundColor: theme.palette.secondary.main,
-      '&:hover': {
-        backgroundColor: theme.palette.secondary.main,
-      },
-    },
     signInTextContainer: {
       display: 'flex',
       flexGrow: 1,
       alignItems: 'center',
       justifyContent: 'center',
       [theme.breakpoints.up('md')]: {
+        marginTop: theme.spacing(10.5),
         justifyContent: 'flex-start',
       },
       [theme.breakpoints.up('lg')]: {
-        marginTop: theme.spacing(2),
         alignItems: 'flex-start',
       },
     },
     signInText: {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
+      width: '100%',
+      textAlign: 'center',
+    },
+    input: {
+      height: '100%',
+    },
+    topSection: {
+      zIndex: 2,
+    },
+    searchTextField: {
+      minWidth: '100%',
+      height: '70px',
+    },
+    searchInput: {
+      height: '100%',
+      background: 'white',
+      boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.25)',
+      borderRadius: '5px',
+      border: 0,
+    },
+    searchInputNested: {
+      fontSize: '1rem',
+    },
+    searchInputIcon: {
+      marginLeft: '32px',
+      marginRight: '20px',
     },
   }),
 )
@@ -105,14 +147,10 @@ const LandingGraphicSliver = () => {
   const topPaddingMultipler = () => {
     const theme = useTheme()
     const isMediumWidth = useMediaQuery(theme.breakpoints.up('md'))
-    const isDesktopWidth = useMediaQuery(theme.breakpoints.up('lg'))
     if (isMediumWidth) {
-      return 1
+      return 50 / 64
     }
-    if (isDesktopWidth) {
-      return 1.75
-    }
-    return 0.5
+    return 0
   }
 
   return (
@@ -121,6 +159,7 @@ const LandingGraphicSliver = () => {
         backgroundType="dark"
         topMultiplier={topPaddingMultipler()}
         bottomMultiplier={0}
+        className={classes.topSection}
       >
         <div className={classes.container}>
           <div className={classes.titleTextContainer}>
@@ -140,42 +179,45 @@ const LandingGraphicSliver = () => {
               <Trans>general.appDescription.subtitle</Trans>
             </Typography>
           </div>
-          <IgnoreAppRightMargins className={classes.rotatingLinksGraphic}>
-            <RotatingLinksGraphic />
-          </IgnoreAppRightMargins>
+          <img
+            src={landingGraphicMain}
+            alt="Landing graphic"
+            className={classes.headerGraphic}
+          />
+          <TextField
+            className={classes.searchTextField}
+            placeholder="Search all go.gov.sg links"
+            InputProps={{
+              className: classes.searchInput,
+              startAdornment: (
+                <img
+                  src={searchIcon}
+                  alt="search"
+                  className={classes.searchInputIcon}
+                />
+              ),
+            }}
+            // TextField takes in two separate inputProps and InputProps,
+            // each having its own purpose.
+            // eslint-disable-next-line react/jsx-no-duplicate-props
+            inputProps={{
+              className: classes.searchInputNested,
+            }}
+          />
         </div>
       </Section>
       <div className={classes.fillColor}>
-        <Hidden mdDown>
-          <ApplyAppMargins>
-            <Button
-              className={classes.learnMoreButton}
-              variant="outlined"
-              color="primary"
-              size="large"
-              onClick={() =>
-                document
-                  .getElementById('landing-bottom')
-                  .scrollIntoView({ behavior: 'smooth' })
-              }
-            >
-              Learn more
-            </Button>
-          </ApplyAppMargins>
-        </Hidden>
         <div className={classes.signInTextContainer}>
-          <ApplyAppMargins>
-            <Typography
-              className={classes.signInText}
-              variant="caption"
-              color="secondary"
-            >
-              <Trans>general.appSignInPrompt</Trans>{' '}
-              <Link href="/#/login" color="inherit" underline="always">
-                Sign in
-              </Link>
-            </Typography>
-          </ApplyAppMargins>
+          <Typography
+            className={classes.signInText}
+            variant="caption"
+            color="secondary"
+          >
+            <Trans>general.appSignInPrompt</Trans>{' '}
+            <Link href="/#/login" color="inherit" underline="always">
+              Sign in
+            </Link>
+          </Typography>
         </div>
       </div>
     </div>
