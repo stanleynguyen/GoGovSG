@@ -2,7 +2,6 @@ import React from 'react'
 import { Trans } from 'react-i18next'
 import {
   Link,
-  TextField,
   Typography,
   createStyles,
   makeStyles,
@@ -11,7 +10,7 @@ import {
 } from '@material-ui/core'
 import Section from '../Section'
 import landingGraphicMain from '../../assets/landing-page-graphics/landing-main.svg'
-import searchIcon from '../../assets/icons/go-search-icon.svg'
+import GoSearchInput from '../widgets/GoSearchInput'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -118,25 +117,6 @@ const useStyles = makeStyles((theme) =>
     input: {
       height: '100%',
     },
-    topSection: {},
-    searchTextField: {
-      minWidth: '100%',
-      height: '70px',
-    },
-    searchInput: {
-      height: '100%',
-      background: 'white',
-      boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.25)',
-      borderRadius: '5px',
-      border: 0,
-    },
-    searchInputNested: {
-      fontSize: '1rem',
-    },
-    searchInputIcon: {
-      marginLeft: '32px',
-      marginRight: '20px',
-    },
   }),
 )
 
@@ -157,7 +137,6 @@ const LandingGraphicSliver = () => {
         backgroundType="white"
         topMultiplier={topPaddingMultipler()}
         bottomMultiplier={0}
-        className={classes.topSection}
       >
         <div className={classes.container}>
           <div className={classes.titleTextContainer}>
@@ -182,26 +161,7 @@ const LandingGraphicSliver = () => {
             alt="Landing graphic"
             className={classes.headerGraphic}
           />
-          <TextField
-            className={classes.searchTextField}
-            placeholder="Search all go.gov.sg links"
-            InputProps={{
-              className: classes.searchInput,
-              startAdornment: (
-                <img
-                  src={searchIcon}
-                  alt="search"
-                  className={classes.searchInputIcon}
-                />
-              ),
-            }}
-            // TextField takes in two separate inputProps and InputProps,
-            // each having its own purpose.
-            // eslint-disable-next-line react/jsx-no-duplicate-props
-            inputProps={{
-              className: classes.searchInputNested,
-            }}
-          />
+          <GoSearchInput />
         </div>
       </Section>
       <div className={classes.fillColor}>
