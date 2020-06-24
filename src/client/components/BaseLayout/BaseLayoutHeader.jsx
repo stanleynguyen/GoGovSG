@@ -70,6 +70,15 @@ const useStyles = makeStyles((theme) =>
       width: '100%',
       height: '100%',
     },
+    headerButton: {
+      // this class is not mobile first by default as padding should not be set
+      // when it is not mobile.
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: 0,
+        paddingRight: 0,
+        minWidth: theme.spacing(6),
+      },
+    },
   }),
 )
 
@@ -131,7 +140,7 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
     </Button>
   ) : (
     <>
-      <Hidden xsDown>
+      <Hidden smDown>
         <Button
           href="/#/login"
           size="large"
@@ -142,8 +151,8 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
           Sign in
         </Button>
       </Hidden>
-      <Hidden smUp>
-        <Button href="/#/login" size="large">
+      <Hidden mdUp>
+        <Button href="/#/login" size="large" className={classes.headerButton}>
           Sign in
           <img
             src={signinIcon}
@@ -178,6 +187,7 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
                   size="large"
                   variant="text"
                   key={header.text}
+                  className={classes.headerButton}
                   style={
                     isMobileVariant && header.mobileOrder
                       ? { order: header.mobileOrder }

@@ -7,10 +7,16 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     backgroundType: {
       width: '100%',
-      backgroundColor: (props) =>
-        props.backgroundType === 'light'
-          ? theme.palette.secondary.light
-          : theme.palette.secondary.dark,
+      backgroundColor: (props) => {
+        switch (props.backgroundType) {
+          case 'light':
+            return theme.palette.secondary.light
+          case 'dark':
+            return theme.palette.secondary.dark
+          default:
+            return props.backgroundType
+        }
+      },
       boxShadow: (props) =>
         props.shadow ? '0px 1px 1px rgba(216, 216, 216, 0.5)' : 0,
       '@media screen\\0': {

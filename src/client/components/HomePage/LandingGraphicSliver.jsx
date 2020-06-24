@@ -118,9 +118,7 @@ const useStyles = makeStyles((theme) =>
     input: {
       height: '100%',
     },
-    topSection: {
-      zIndex: 2,
-    },
+    topSection: {},
     searchTextField: {
       minWidth: '100%',
       height: '70px',
@@ -156,7 +154,7 @@ const LandingGraphicSliver = () => {
   return (
     <div className={classes.pageHeightContainer}>
       <Section
-        backgroundType="dark"
+        backgroundType="white"
         topMultiplier={topPaddingMultipler()}
         bottomMultiplier={0}
         className={classes.topSection}
