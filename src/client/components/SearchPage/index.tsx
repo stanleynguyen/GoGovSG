@@ -79,7 +79,14 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
             style={{ marginTop: '24px' }}
           >
             {searchResults.map((url: UrlTypePublic) => (
-              <TableRow className={classes.tableRow}>
+              <TableRow
+                className={classes.tableRow}
+                onClick={() =>
+                  window.location.assign(
+                    `${document.location.protocol}//${document.location.host}/${url.shortUrl}`,
+                  )
+                }
+              >
                 <TableCell
                   style={{
                     display: 'inline-flex',
@@ -87,10 +94,18 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
                     paddingBottom: '5px',
                     paddingTop: '45px',
                     borderBottom: 'none',
+                    maxWidth: `calc(100vw - ${appMargins}px * 2)`,
                     marginLeft: appMargins,
                   }}
                 >
-                  <Typography variant="h5">
+                  <Typography
+                    variant="h5"
+                    style={{
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                    }}
+                  >
                     <span
                       style={{
                         color: '#8CA6AD',
@@ -130,6 +145,10 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
                       color: '#767676',
                       fontWeight: 400,
                       marginLeft: '224px',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '20%',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
                     }}
                   >
                     {url.contactEmail || 'No contact specified'}
