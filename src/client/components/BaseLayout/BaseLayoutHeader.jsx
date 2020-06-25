@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core'
 import i18next from 'i18next'
 import GoLogo from '~/assets/go-main-logo.svg'
+import GoLogoLight from '~/assets/go-main-logo-light.svg'
 import loginActions from '../../actions/login'
 import Section from '../Section'
 import logoutIcon from './assets/logout-icon.svg'
@@ -57,6 +58,9 @@ const useStyles = makeStyles((theme) =>
       width: '140px',
       minWidth: '90px',
       order: 10,
+      color: (props) => (props.isLightItems ? '#384A51' : 'white'),
+      background: (props) =>
+        props.isLightItems ? 'white' : theme.palette.primary.main,
     },
     signInIcon: {
       paddingLeft: theme.spacing(0.5),
@@ -71,6 +75,7 @@ const useStyles = makeStyles((theme) =>
       height: '100%',
     },
     headerButton: {
+      filter: (props) => (props.isLightItems ? 'brightness(10)' : ''),
       // this class is not mobile first by default as padding should not be set
       // when it is not mobile.
       [theme.breakpoints.down('xs')]: {
@@ -91,9 +96,10 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
+  const isLightItems = backgroundType === 'darkest'
   const theme = useTheme()
   const isMobileVariant = useMediaQuery(theme.breakpoints.down('sm'))
-  const classes = useStyles({ isLoggedIn })
+  const classes = useStyles({ isLoggedIn, isLightItems })
 
   const headers = [
     {
@@ -144,8 +150,8 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
         <Button
           href="/#/login"
           size="large"
-          color="primary"
           variant="contained"
+          color={isLightItems ? 'default' : 'primary'}
           className={classes.appBarSignInBtn}
         >
           Sign in
@@ -174,7 +180,11 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
       <AppBar position="static" color="transparent" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <a href="/#/" className={classes.toolbarLogo}>
-            <img src={GoLogo} className={classes.logo} alt="GoGovSG Logo" />
+            <img
+              src={isLightItems ? GoLogoLight : GoLogo}
+              className={classes.logo}
+              alt="GoGovSG Logo"
+            />
           </a>
           <span className={classes.rowSpace} />
           {headers.map(

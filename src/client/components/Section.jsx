@@ -8,11 +8,15 @@ const useStyles = makeStyles((theme) =>
     backgroundType: {
       width: '100%',
       backgroundColor: (props) => {
+        console.log(theme.palette.secondary.light)
+        console.log(theme.palette.secondary)
         switch (props.backgroundType) {
           case 'light':
             return theme.palette.secondary.light
           case 'dark':
             return theme.palette.secondary.dark
+          case 'darkest':
+            return '#384A51'
           default:
             return props.backgroundType
         }
