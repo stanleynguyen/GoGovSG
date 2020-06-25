@@ -1,15 +1,18 @@
 import { ThunkAction } from 'redux-thunk'
 import { Dispatch } from 'react'
 import querystring from 'querystring'
+import { History } from 'history'
 import {
   CLEAR_SEARCH_QUERY,
   ClearSearchQueryAction,
+  SET_IS_REDIRECT_ON_RESULT,
   SET_SEARCH_PAGE_NUMBER,
   SET_SEARCH_QUERY,
   SET_SEARCH_RESULTS,
   SET_SEARCH_ROWS_PER_PAGE,
   SET_SEARCH_SORT_ORDER,
   SearchActionType,
+  SetIsRedirectOnResultAction,
   SetSearchPageNumberAction,
   SetSearchQueryAction,
   SetSearchResultsAction,
@@ -23,6 +26,7 @@ import rootActions from '../root'
 import { SearchResultsSortOrder } from '../../../shared/search'
 import { UrlTypePublic } from '../../reducers/search/types'
 import { get } from '../../util/requests'
+import { SEARCH_PAGE } from '../../util/types'
 
 function setSearchQuery(payload: string): SetSearchQueryAction {
   return {
@@ -71,18 +75,30 @@ function setSearchResults(payload: {
   }
 }
 
-const getSearchResults = (): ThunkAction<
+function setIsRedirectOnResult(payload: boolean): SetIsRedirectOnResultAction {
+  return {
+    type: SET_IS_REDIRECT_ON_RESULT,
+    payload,
+  }
+}
+
+const getSearchResults = (
+  history: History,
+): ThunkAction<
   void,
   GoGovReduxState,
   void,
   SearchActionType | RootActionType
 > => async (
-  dispatch: Dispatch<SetErrorMessageAction | SetSearchResultsAction>,
+  dispatch: Dispatch<
+    SetErrorMessageAction | SetSearchResultsAction | SetIsRedirectOnResultAction
+  >,
   getState: GetReduxState,
 ) => {
   const {
     search: {
-      tableConfig: { currentPage, rowsPerPage, sortOrder },
+      isRedirectOnResult,
+      tableConfig: { currentPage, rowsPerPage, sortOrder: order },
       query,
     },
   } = getState()
@@ -93,7 +109,7 @@ const getSearchResults = (): ThunkAction<
   const limit = rowsPerPage
   const paramsObj = {
     query,
-    sortOrder,
+    order,
     limit,
     offset,
   }
@@ -116,6 +132,11 @@ const getSearchResults = (): ThunkAction<
       query,
     }),
   )
+
+  if (isRedirectOnResult) {
+    dispatch(setIsRedirectOnResult(false))
+    history.push(SEARCH_PAGE)
+  }
 }
 
 export default {
@@ -126,4 +147,5 @@ export default {
   setSearchRowsPerPage,
   setSearchPageNumber,
   setSearchResults,
+  setIsRedirectOnResult,
 }

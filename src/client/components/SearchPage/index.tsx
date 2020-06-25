@@ -2,7 +2,18 @@ import React, { FunctionComponent } from 'react'
 import GoSearchInput from '../widgets/GoSearchInput'
 import BaseLayout from '../BaseLayout'
 import { ApplyAppMargins } from '../AppMargins'
-import { Typography, createStyles, makeStyles } from '@material-ui/core'
+import {
+  Typography,
+  createStyles,
+  makeStyles,
+  Table,
+  TableRow,
+  TableCell,
+} from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import { GoGovReduxState } from '../../reducers/types'
+import useAppMargins from '../AppMargins/appMargins'
+import { UrlTypePublic } from '../../reducers/search/types'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -11,6 +22,12 @@ const useStyles = makeStyles(() =>
       position: 'sticky',
       top: 0,
     },
+    tableRow: {
+      '&:hover': {
+        backgroundColor: '#f9f9f9',
+        cursor: 'pointer',
+      },
+    },
   }),
 )
 
@@ -18,6 +35,16 @@ type SearchPageProps = {}
 
 const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
   const classes = useStyles()
+  const appMargins = useAppMargins()
+  const resultsCount = useSelector(
+    (state: GoGovReduxState) => state.search.resultsCount,
+  )
+  const queryForResult = useSelector(
+    (state: GoGovReduxState) => state.search.queryForResult,
+  )
+  const searchResults = useSelector(
+    (state: GoGovReduxState) => state.search.results,
+  )
   return (
     <BaseLayout headerBackgroundType="darkest">
       <div className={classes.headerWrapper}>
@@ -40,9 +67,79 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
           </div>
         </ApplyAppMargins>
       </div>
-      <ApplyAppMargins>
-        <div style={{ height: '100vh', background: 'white' }}>test</div>
-      </ApplyAppMargins>
+      {queryForResult && (
+        <>
+          <ApplyAppMargins>
+            <Typography variant="h3" style={{ marginTop: '88px' }}>
+              {`Showing ${resultsCount} links for “${queryForResult || ''}”`}
+            </Typography>
+          </ApplyAppMargins>
+          <Table
+            aria-label="search results table"
+            style={{ marginTop: '24px' }}
+          >
+            {searchResults.map((url: UrlTypePublic) => (
+              <TableRow className={classes.tableRow}>
+                <TableCell
+                  style={{
+                    display: 'inline-flex',
+                    width: '100%',
+                    paddingBottom: '5px',
+                    paddingTop: '45px',
+                    borderBottom: 'none',
+                    marginLeft: appMargins,
+                  }}
+                >
+                  <Typography variant="h5">
+                    <span
+                      style={{
+                        color: '#8CA6AD',
+                      }}
+                    >
+                      go.gov.sg/
+                    </span>
+                    {url.shortUrl}
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  style={{
+                    display: 'inline-flex',
+                    width: '100%',
+                    paddingTop: '5px',
+                    minHeight: '96px',
+                    marginRight: 0,
+                  }}
+                >
+                  <Typography
+                    color="primary"
+                    variant="body2"
+                    style={{
+                      color: '#384a51',
+                      fontWeight: 400,
+                      width: '44%',
+                      marginLeft: appMargins,
+                    }}
+                  >
+                    {url.description
+                      ? url.description
+                      : 'No information available.'}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: '#767676',
+                      fontWeight: 400,
+                      marginLeft: '224px',
+                    }}
+                  >
+                    {url.contactEmail || 'No contact specified'}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </Table>
+        </>
+      )}
     </BaseLayout>
   )
 }

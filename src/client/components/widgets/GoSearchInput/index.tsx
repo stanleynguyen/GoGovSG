@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { GoGovReduxState } from '../../../reducers/types'
 import searchActions from '../../../actions/search'
 import { useHistory } from 'react-router-dom'
+import debounce from 'lodash/debounce'
 import sortIcon from './assets/search-sort-icon.svg'
 import CloseIcon from '../CloseIcon'
 
@@ -48,13 +49,16 @@ const GoSearchInput: FunctionComponent<GoSearchInputProps> = ({}) => {
   const dispatch = useDispatch()
   const query = useSelector((state: GoGovReduxState) => state.search.query)
   const history = useHistory()
+  const getResults = debounce(
+    () => dispatch(searchActions.getSearchResults(history)),
+    500,
+  )
   const onUpdateQuery = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     dispatch(searchActions.setSearchQuery(e.target.value))
-    setTimeout(() => {
-      history.push('/search')
-    }, 2000)
+    dispatch(searchActions.setIsRedirectOnResult(true))
+    getResults()
   }
   const onClearQuery = () => dispatch(searchActions.clearSearchQuery())
   return (

@@ -2,6 +2,7 @@ import { SearchState } from './types'
 import { SearchResultsSortOrder } from '../../../shared/search'
 import {
   CLEAR_SEARCH_QUERY,
+  SET_IS_REDIRECT_ON_RESULT,
   SET_SEARCH_PAGE_NUMBER,
   SET_SEARCH_QUERY,
   SET_SEARCH_RESULTS,
@@ -20,6 +21,7 @@ const initialState: SearchState = {
     currentPage: 0,
     sortOrder: SearchResultsSortOrder.Relevance,
   },
+  isRedirectOnResult: false,
 }
 
 const search: (state: SearchState, action: SearchActionType) => SearchState = (
@@ -28,6 +30,11 @@ const search: (state: SearchState, action: SearchActionType) => SearchState = (
 ) => {
   let nextState: Partial<SearchState> = {}
   switch (action.type) {
+    case SET_IS_REDIRECT_ON_RESULT:
+      nextState = {
+        isRedirectOnResult: action.payload,
+      }
+      break
     case SET_SEARCH_QUERY:
       nextState = {
         query: action.payload,
