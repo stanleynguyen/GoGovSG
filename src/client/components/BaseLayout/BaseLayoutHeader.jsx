@@ -193,7 +193,7 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
               (header.public ? !isLoggedIn : isLoggedIn) && (
                 <Button
                   href={header.internalLink ? `/#${header.link}` : header.link}
-                  target="_blank"
+                  target={header.internalLink ? '' : '_blank'}
                   color="primary"
                   size="large"
                   variant="text"
