@@ -22,6 +22,7 @@ import feedbackIcon from './assets/feedback-icon.svg'
 import githubIcon from './assets/github-icon.svg'
 import signinIcon from './assets/signin-icon.svg'
 import searchIcon from '../../assets/icons/go-search-icon.svg'
+import { SEARCH_PAGE } from '../../util/types'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -104,8 +105,8 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
   const headers = [
     {
       text: 'GoSearch',
-      // TODO: Add search link
-      link: i18next.t('general.links.contribute'),
+      link: SEARCH_PAGE,
+      internalLink: true,
       public: true,
       icon: searchIcon,
     },
@@ -191,7 +192,7 @@ const BaseLayoutHeader = ({ backgroundType, isLoggedIn, logout }) => {
             (header) =>
               (header.public ? !isLoggedIn : isLoggedIn) && (
                 <Button
-                  href={header.link}
+                  href={header.internalLink ? `/#/${header.link}` : header.link}
                   target="_blank"
                   color="primary"
                   size="large"
