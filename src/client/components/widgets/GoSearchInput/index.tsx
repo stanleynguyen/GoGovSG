@@ -1,19 +1,19 @@
 import React, { FunctionComponent, useState } from 'react'
 import {
+  ClickAwayListener,
+  IconButton,
+  TextField,
   createStyles,
   makeStyles,
-  TextField,
-  IconButton,
-  ClickAwayListener,
 } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+import debounce from 'lodash/debounce'
+import { useHistory } from 'react-router-dom'
 import searchIcon from '../../../assets/icons/go-search-icon.svg'
-import { useSelector, useDispatch } from 'react-redux'
 import { GoGovReduxState } from '../../../reducers/types'
 import searchActions from '../../../actions/search'
-import debounce from 'lodash/debounce'
 import sortIcon from './assets/search-sort-icon.svg'
 import CloseIcon from '../CloseIcon'
-import { useHistory } from 'react-router-dom'
 import { SEARCH_PAGE } from '../../../util/types'
 import CollapsingPanel from '../CollapsingPanel'
 import { SearchResultsSortOrder } from '../../../../shared/search'
@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) =>
       right: 0,
       left: 'auto',
     },
+    sortPanelContent: {
+      marginTop: theme.spacing(3.5),
+    },
   }),
 )
 
@@ -68,9 +71,7 @@ const sortOptions = [
 const GoSearchInput: FunctionComponent<GoSearchInputProps> = ({
   autoSearch,
   showAdornments,
-}) => {
-  // TODO: REMOVE IGNORE ONCE ISSORTPANELOPEN IS USED.
-  // @ts-ignore
+}: GoSearchInputProps) => {
   const [isSortPanelOpen, setIsSortPanelOpen] = useState(false)
   const classes = useStyles()
   const history = useHistory()
@@ -155,7 +156,7 @@ const GoSearchInput: FunctionComponent<GoSearchInputProps> = ({
           }}
         />
         <CollapsingPanel isOpen={isSortPanelOpen} className={classes.sortPanel}>
-          <div style={{ marginTop: '30px' }}>
+          <div className={classes.searchTextField}>
             <SortPanel
               onChoose={setSortBy}
               currentlyChosen={sortBy}

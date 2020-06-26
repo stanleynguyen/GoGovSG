@@ -176,8 +176,8 @@
     "**/*.(js|jsx)": [
       "eslint --ext .js,.jsx --no-eslintrc -c .eslintrc.json --fix"
     ],
-    "**/*.ts": [
-      "eslint --ext .ts --no-eslintrc -c .eslintrc.ts.json --fix"
+    "**/*.(ts|tsx)": [
+      "eslint --ext .ts,.tsx --no-eslintrc -c .eslintrc.ts.json --fix"
     ]
   },
   "config": {

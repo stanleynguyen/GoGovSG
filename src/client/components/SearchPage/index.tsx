@@ -1,17 +1,17 @@
 import React, { FunctionComponent } from 'react'
-import GoSearchInput from '../widgets/GoSearchInput'
-import BaseLayout from '../BaseLayout'
-import { ApplyAppMargins } from '../AppMargins'
 import {
+  Table,
+  TableCell,
+  TablePagination,
+  TableRow,
   Typography,
   createStyles,
   makeStyles,
-  Table,
-  TableRow,
-  TableCell,
-  TablePagination,
 } from '@material-ui/core'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import GoSearchInput from '../widgets/GoSearchInput'
+import BaseLayout from '../BaseLayout'
+import { ApplyAppMargins } from '../AppMargins'
 import { GoGovReduxState } from '../../reducers/types'
 import useAppMargins from '../AppMargins/appMargins'
 import { UrlTypePublic } from '../../reducers/search/types'
@@ -62,6 +62,62 @@ const useStyles = makeStyles((theme) =>
       marginTop: '52px',
       marginBottom: '46px',
     },
+    headerContent: {
+      display: 'flex',
+      flexDirection: 'column',
+      position: 'relative',
+      top: '35px',
+    },
+    headerText: {
+      color: '#f9f9f9',
+      marginBottom: theme.spacing(3),
+    },
+    resultsHeaderText: {
+      marginTop: theme.spacing(11),
+    },
+    resultsTable: {
+      marginTop: theme.spacing(3),
+    },
+    shortLinkCell: {
+      display: 'inline-flex',
+      width: '100%',
+      paddingBottom: '5px',
+      paddingTop: '45px',
+      borderBottom: 'none',
+      maxWidth: (props: SearchPageStyleProps) =>
+        `calc(100vw - ${props.appMargins}px * 2)`,
+      marginLeft: (props: SearchPageStyleProps) => props.appMargins,
+    },
+    shortLinkText: {
+      textOverfxlow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+    },
+    domainText: {
+      color: '#8CA6AD',
+    },
+    urlInformationCell: {
+      display: 'inline-flex',
+      width: '100%',
+      paddingTop: theme.spacing(0.5),
+      minHeight: theme.spacing(12),
+      marginRight: 0,
+    },
+    descriptionText: {
+      color: '#384a51',
+      fontWeight: 400,
+      width: '44%',
+      marginLeft: (props: SearchPageStyleProps) => props.appMargins,
+    },
+    contactEmailText: {
+      color: '#767676',
+      fontWeight: 400,
+      marginLeft: theme.spacing(28),
+      textOverflow: 'ellipsis',
+      maxWidth: '20%',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+    },
   }),
 )
 
@@ -71,7 +127,7 @@ type SearchPageStyleProps = {
   appMargins: number
 }
 
-const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
+const SearchPage: FunctionComponent<SearchPageProps> = () => {
   const appMargins = useAppMargins()
   const classes = useStyles({ appMargins })
   const dispatch = useDispatch()
@@ -112,18 +168,8 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
     <BaseLayout headerBackgroundType="darkest">
       <div className={classes.headerWrapper}>
         <ApplyAppMargins>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'relative',
-              top: '35px',
-            }}
-          >
-            <Typography
-              variant="h2"
-              style={{ color: '#f9f9f9', marginBottom: '24px' }}
-            >
+          <div className={classes.headerContent}>
+            <Typography variant="h2" className={classes.headerText}>
               GoSearch
             </Typography>
             <GoSearchInput autoSearch showAdornments />
@@ -133,7 +179,7 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
       {(queryForResult || '').trim() && (
         <>
           <ApplyAppMargins>
-            <Typography variant="h3" style={{ marginTop: '88px' }}>
+            <Typography variant="h3" className={classes.resultsHeaderText}>
               {`Showing ${resultsCount} links for “${(
                 queryForResult || ''
               ).trim()}”`}
@@ -141,7 +187,7 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
           </ApplyAppMargins>
           <Table
             aria-label="search results table"
-            style={{ marginTop: '24px' }}
+            className={classes.resultsTable}
           >
             {searchResults.map((url: UrlTypePublic) => (
               <TableRow
@@ -152,53 +198,17 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
                   )
                 }
               >
-                <TableCell
-                  style={{
-                    display: 'inline-flex',
-                    width: '100%',
-                    paddingBottom: '5px',
-                    paddingTop: '45px',
-                    borderBottom: 'none',
-                    maxWidth: `calc(100vw - ${appMargins}px * 2)`,
-                    marginLeft: appMargins,
-                  }}
-                >
-                  <Typography
-                    variant="h5"
-                    style={{
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: '#8CA6AD',
-                      }}
-                    >
-                      go.gov.sg/
-                    </span>
+                <TableCell className={classes.shortLinkCell}>
+                  <Typography variant="h5" className={classes.shortLinkText}>
+                    <span className={classes.domainText}>go.gov.sg/</span>
                     {url.shortUrl}
                   </Typography>
                 </TableCell>
-                <TableCell
-                  style={{
-                    display: 'inline-flex',
-                    width: '100%',
-                    paddingTop: '5px',
-                    minHeight: '96px',
-                    marginRight: 0,
-                  }}
-                >
+                <TableCell className={classes.urlInformationCell}>
                   <Typography
                     color="primary"
                     variant="body2"
-                    style={{
-                      color: '#384a51',
-                      fontWeight: 400,
-                      width: '44%',
-                      marginLeft: appMargins,
-                    }}
+                    className={classes.descriptionText}
                   >
                     {url.description
                       ? url.description
@@ -206,15 +216,7 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
                   </Typography>
                   <Typography
                     variant="body2"
-                    style={{
-                      color: '#767676',
-                      fontWeight: 400,
-                      marginLeft: '224px',
-                      textOverflow: 'ellipsis',
-                      maxWidth: '20%',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                    }}
+                    className={classes.contactEmailText}
                   >
                     {url.contactEmail || 'No contact specified'}
                   </Typography>
