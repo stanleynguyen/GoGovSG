@@ -26,9 +26,13 @@ type GoSearchInputProps = {
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    searchTextField: {
+    root: {
       minWidth: '100%',
       height: '70px',
+    },
+    searchTextField: {
+      width: '100%',
+      height: '100%',
     },
     searchInput: {
       height: '100%',
@@ -99,7 +103,7 @@ const GoSearchInput: FunctionComponent<GoSearchInputProps> = ({
   }
   return (
     <ClickAwayListener onClickAway={() => setIsSortPanelOpen(false)}>
-      <div>
+      <div className={classes.root}>
         <TextField
           autoFocus
           className={classes.searchTextField}
