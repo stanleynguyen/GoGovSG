@@ -130,11 +130,13 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
           </div>
         </ApplyAppMargins>
       </div>
-      {queryForResult && (
+      {(queryForResult || '').trim() && (
         <>
           <ApplyAppMargins>
             <Typography variant="h3" style={{ marginTop: '88px' }}>
-              {`Showing ${resultsCount} links for “${queryForResult || ''}”`}
+              {`Showing ${resultsCount} links for “${(
+                queryForResult || ''
+              ).trim()}”`}
             </Typography>
           </ApplyAppMargins>
           <Table

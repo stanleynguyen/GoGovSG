@@ -86,7 +86,7 @@ const getSearchResults = (): ThunkAction<
       query,
     },
   } = getState()
-  if (!query) {
+  if (!query.trim()) {
     return
   }
   const offset = currentPage * rowsPerPage
