@@ -9,7 +9,6 @@ export type SearchState = {
   query: string
   queryForResult: string | null
   tableConfig: SearchResultsTableConfig
-  isRedirectOnResult: boolean
 }
 
 type SearchResultsTableConfig = {

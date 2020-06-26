@@ -63,7 +63,7 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
             >
               GoSearch
             </Typography>
-            <GoSearchInput />
+            <GoSearchInput autoSearch showAdornments />
           </div>
         </ApplyAppMargins>
       </div>

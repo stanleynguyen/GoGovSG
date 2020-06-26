@@ -1,18 +1,15 @@
 import { ThunkAction } from 'redux-thunk'
 import { Dispatch } from 'react'
 import querystring from 'querystring'
-import { History } from 'history'
 import {
   CLEAR_SEARCH_QUERY,
   ClearSearchQueryAction,
-  SET_IS_REDIRECT_ON_RESULT,
   SET_SEARCH_PAGE_NUMBER,
   SET_SEARCH_QUERY,
   SET_SEARCH_RESULTS,
   SET_SEARCH_ROWS_PER_PAGE,
   SET_SEARCH_SORT_ORDER,
   SearchActionType,
-  SetIsRedirectOnResultAction,
   SetSearchPageNumberAction,
   SetSearchQueryAction,
   SetSearchResultsAction,
@@ -26,7 +23,6 @@ import rootActions from '../root'
 import { SearchResultsSortOrder } from '../../../shared/search'
 import { UrlTypePublic } from '../../reducers/search/types'
 import { get } from '../../util/requests'
-import { SEARCH_PAGE } from '../../util/types'
 
 function setSearchQuery(payload: string): SetSearchQueryAction {
   return {
@@ -75,29 +71,17 @@ function setSearchResults(payload: {
   }
 }
 
-function setIsRedirectOnResult(payload: boolean): SetIsRedirectOnResultAction {
-  return {
-    type: SET_IS_REDIRECT_ON_RESULT,
-    payload,
-  }
-}
-
-const getSearchResults = (
-  history: History,
-): ThunkAction<
+const getSearchResults = (): ThunkAction<
   void,
   GoGovReduxState,
   void,
   SearchActionType | RootActionType
 > => async (
-  dispatch: Dispatch<
-    SetErrorMessageAction | SetSearchResultsAction | SetIsRedirectOnResultAction
-  >,
+  dispatch: Dispatch<SetErrorMessageAction | SetSearchResultsAction>,
   getState: GetReduxState,
 ) => {
   const {
     search: {
-      isRedirectOnResult,
       tableConfig: { currentPage, rowsPerPage, sortOrder: order },
       query,
     },
@@ -132,11 +116,6 @@ const getSearchResults = (
       query,
     }),
   )
-
-  if (isRedirectOnResult) {
-    dispatch(setIsRedirectOnResult(false))
-    history.push(SEARCH_PAGE)
-  }
 }
 
 export default {
@@ -147,5 +126,4 @@ export default {
   setSearchRowsPerPage,
   setSearchPageNumber,
   setSearchResults,
-  setIsRedirectOnResult,
 }

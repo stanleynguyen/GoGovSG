@@ -7,16 +7,10 @@ export const SET_SEARCH_SORT_ORDER = 'SET_SEARCH_SORT_ORDER'
 export const SET_SEARCH_ROWS_PER_PAGE = 'SET_SEARCH_ROWS_PER_PAGE'
 export const SET_SEARCH_PAGE_NUMBER = 'SET_SEARCH_PAGE_NUMBER'
 export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS'
-export const SET_IS_REDIRECT_ON_RESULT = 'SET_IS_REDIRECT_ON_RESULT'
 
 export type SetSearchQueryAction = {
   type: typeof SET_SEARCH_QUERY
   payload: string
-}
-
-export type SetIsRedirectOnResultAction = {
-  type: typeof SET_IS_REDIRECT_ON_RESULT
-  payload: boolean
 }
 
 export type ClearSearchQueryAction = {
@@ -54,4 +48,3 @@ export type SearchActionType =
   | SetSearchRowsPerPageAction
   | SetSearchPageNumberAction
   | SetSearchResultsAction
-  | SetIsRedirectOnResultAction
