@@ -93,7 +93,10 @@ const GoSearchInput: FunctionComponent<GoSearchInputProps> = ({
       getResults()
     }
   }
-  const onClearQuery = () => dispatch(searchActions.clearSearchQuery())
+  const onClearQuery = () => {
+    setIsSortPanelOpen(false)
+    dispatch(searchActions.clearSearchQuery())
+  }
   return (
     <ClickAwayListener onClickAway={() => setIsSortPanelOpen(false)}>
       <div>

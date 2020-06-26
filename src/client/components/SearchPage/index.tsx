@@ -9,13 +9,16 @@ import {
   Table,
   TableRow,
   TableCell,
+  TablePagination,
 } from '@material-ui/core'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { GoGovReduxState } from '../../reducers/types'
 import useAppMargins from '../AppMargins/appMargins'
 import { UrlTypePublic } from '../../reducers/search/types'
+import searchActions from '../../actions/search'
+import PaginationActionComponent from '../widgets/PaginationActionComponent'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     headerWrapper: {
       backgroundColor: '#384a51',
@@ -28,14 +31,50 @@ const useStyles = makeStyles(() =>
         cursor: 'pointer',
       },
     },
+    toolbar: {
+      paddingLeft: (props: SearchPageStyleProps) => props.appMargins,
+      paddingRight: (props: SearchPageStyleProps) => props.appMargins,
+    },
+    spacer: {
+      flex: 0,
+    },
+    caption: {
+      fontWeight: 400,
+      marginRight: '4px',
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
+    },
+    select: {
+      border: 'solid 1px #d8d8d8',
+      zIndex: 2,
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
+    },
+    selectIcon: {
+      zIndex: 2,
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
+    },
+    pagination: {
+      marginTop: '52px',
+      marginBottom: '46px',
+    },
   }),
 )
 
 type SearchPageProps = {}
 
+type SearchPageStyleProps = {
+  appMargins: number
+}
+
 const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
-  const classes = useStyles()
   const appMargins = useAppMargins()
+  const classes = useStyles({ appMargins })
+  const dispatch = useDispatch()
   const resultsCount = useSelector(
     (state: GoGovReduxState) => state.search.resultsCount,
   )
@@ -45,6 +84,30 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
   const searchResults = useSelector(
     (state: GoGovReduxState) => state.search.results,
   )
+  const { rowsPerPage, currentPage } = useSelector(
+    (state: GoGovReduxState) => state.search.tableConfig,
+  )
+
+  const pageCount = Math.ceil(resultsCount / rowsPerPage)
+
+  const changePageHandler = (
+    _: React.MouseEvent<HTMLButtonElement> | null,
+    pageNumber: number,
+  ) => {
+    dispatch(searchActions.setSearchPageNumber(pageNumber))
+    dispatch(searchActions.getSearchResults())
+  }
+
+  const changeRowsPerPageHandler = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    dispatch(searchActions.setSearchPageNumber(0))
+    dispatch(
+      searchActions.setSearchRowsPerPage(parseInt(event.target.value, 10)),
+    )
+    dispatch(searchActions.getSearchResults())
+  }
+
   return (
     <BaseLayout headerBackgroundType="darkest">
       <div className={classes.headerWrapper}>
@@ -156,6 +219,37 @@ const SearchPage: FunctionComponent<SearchPageProps> = ({}) => {
                 </TableCell>
               </TableRow>
             ))}
+            <TablePagination
+              className={classes.pagination}
+              ActionsComponent={({ onChangePage, page }) => (
+                <PaginationActionComponent
+                  pageCount={pageCount}
+                  onChangePage={onChangePage}
+                  page={page}
+                />
+              )}
+              labelRowsPerPage="Links per page"
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={resultsCount}
+              rowsPerPage={rowsPerPage}
+              page={currentPage}
+              backIconButtonProps={{
+                'aria-label': 'previous page',
+              }}
+              nextIconButtonProps={{
+                'aria-label': 'next page',
+              }}
+              onChangePage={changePageHandler}
+              onChangeRowsPerPage={changeRowsPerPageHandler}
+              classes={{
+                spacer: classes.spacer,
+                toolbar: classes.toolbar,
+                caption: classes.caption,
+                select: classes.select,
+                selectIcon: classes.selectIcon,
+              }}
+            />
           </Table>
         </>
       )}
